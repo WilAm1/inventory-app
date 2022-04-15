@@ -1,33 +1,38 @@
+const { default: mongoose } = require("mongoose");
 const Item = require("../models/Item.js");
 
 // Get the full list of items
-exports.getItemList = (req, res, next) => {
-  Item.find({}).exec(function (err, items) {
-    if (err) return next(err);
+exports.getItemList = async (req, res, next) => {
+  try {
+    const items = await Item.find({}).exec();
     res.render("itemCatalog", {
       title: "Catalog",
       items,
     });
-  });
+  } catch (err) {
+    return next(err);
+  }
 };
 
-exports.getItemDetail = (req, res, next) => {
+exports.getItemDetail = async (req, res, next) => {
   const itemID = req.params.id;
-
-  Item.findById(itemID)
-    .populate("category")
-    .exec(function (err, item) {
-      if (err) return next(err);
-
-      if (!item) {
-        const errMsg = new Error("Item not found.");
-        errMsg = 404;
-        return next(errMsg);
-      }
-
-      res.render("itemDetail", {
-        title: "Item Detail",
-        item,
-      });
+  try {
+    if (!mongoose.isValidObjectId(itemID)) {
+      const errMsg = new Error("Item not Found");
+      errMsg.status = 404;
+      throw errMsg;
+    }
+    const item = await Item.findById(itemID).populate("category").exec();
+    if (!item) {
+      const errMsg = new Error("Item not found.");
+      errMsg.status = 404;
+      return next(errMsg);
+    }
+    return res.render("itemDetail", {
+      title: "Item Detail",
+      item,
     });
+  } catch (err) {
+    return next(err);
+  }
 };
