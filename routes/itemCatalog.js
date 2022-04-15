@@ -7,5 +7,7 @@ const router = express.Router();
 
 // GET all items
 router.get("/", catalogController.getItemList);
+// GET a single item
+router.get("/:id", catalogController.getItemDetail);
 
 module.exports = router;
