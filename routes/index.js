@@ -3,6 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
+  // TODO Render a landing page later.
   res.render("index", { title: "Express" });
 });
 

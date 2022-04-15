@@ -7,6 +7,7 @@ const logger = require("morgan");
 // Routes
 const indexRouter = require("./routes/index");
 const catalogRouter = require("./routes/catalog");
+const categoryRouter = require("./routes/categories");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/catalog", catalogRouter);
+app.use("/categories", categoryRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
