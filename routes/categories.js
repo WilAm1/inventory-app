@@ -4,5 +4,5 @@ const router = express.Router();
 
 // GET all category in the db
 router.get("/", categoryController.getCategoryList);
-
+router.get("/:id", categoryController.getCategoryDetail);
 module.exports = router;
