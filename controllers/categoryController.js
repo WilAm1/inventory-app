@@ -1,7 +1,7 @@
 const Item = require("../models/Item");
 const Category = require("../models/Category");
 const async = require("async");
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 
 exports.getCategoryList = async (req, res, next) => {
   try {

@@ -1,4 +1,4 @@
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 const Item = require("../models/Item.js");
 
 // Get the full list of items
