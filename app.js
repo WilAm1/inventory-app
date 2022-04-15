@@ -4,9 +4,25 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
+// DB
+const mongoose = require("mongoose");
+
+// DB URI
+const DB_URI =
+  "mongodb+srv://admin:ID5N8gqaWL33PzjH@cluster0.ipkja.mongodb.net/test-inventory?retryWrites=true&w=majority";
+const mongoDB = process.env.MONGODB_URI || DB_URI;
+
+mongoose.connect(mongoDB, {
+  useNewURLParser: true,
+  useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "MongoDB connection error"));
+
 // Routes
 const indexRouter = require("./routes/index");
-const catalogRouter = require("./routes/catalog");
+const catalogRouter = require("./routes/itemCatalog");
 const categoryRouter = require("./routes/categories");
 
 const app = express();
