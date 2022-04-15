@@ -1,6 +1,5 @@
-import mongoose from "mongoose";
-
-const { Schema } = mongoose;
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema();
 
 const CategorySchema = new Schema({
   name: {
@@ -19,4 +18,4 @@ CategorySchema.virtual("url").get(function () {
   return "/category/" + this._id;
 });
 
-export default mongoose.model("Item", CategorySchema);
+module.exports = mongoose.model("Item", CategorySchema);

@@ -1,23 +1,27 @@
-import createError from "http-errors";
-import express, { json, urlencoded } from "express";
-import { join } from "path";
-import cookieParser from "cookie-parser";
-import logger from "morgan";
-import indexRouter from "./routes/index";
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+
+// Routes
+const indexRouter = require("./routes/index");
+const catalogRouter = require("./routes/catalog");
 
 const app = express();
 
 // view engine setup
-app.set("views", join(__dirname, "views"));
+app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 app.use(logger("dev"));
-app.use(json());
-app.use(urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
+app.use("/catalog", catalogRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -35,4 +39,4 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-export default app;
+module.exports = app;

@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
-const { Schema } = mongoose;
+const Schema = mongoose.Schema;
 
 const ItemSchema = new Schema({
   name: {
@@ -34,4 +34,4 @@ ItemSchema.virtual("url").get(function () {
   return "/catalog/" + this._id;
 });
 
-export default mongoose.model("Item", ItemSchema);
+module.exports = mongoose.model("Item", ItemSchema);
