@@ -1,14 +1,16 @@
 extends layout 
 
 block content 
-  h1 Create new Item 
+  h1=title
    
   form(method='POST' action='')
+    
     div.form-group(style='display:flex; flex-direction:column; width: 50%')
+      input(type="hidden" name="id" value=(item ? item._id : ''))
       label(for='name') Name:
       input#name.form-control(type='text', placeholder='Piattos,Nescafe...' name='name' value=(item ? item.name : "") required)
       label(for='description') Description:
-      textarea#description.form-control(type='textarea', placeholder='Something...' name='description' value=(item ? item.description : "") required)
+      textarea#description.form-control(type='textarea', placeholder='Something...' name='description' required) #{item ? item.description : ""}
       label(for='price') Price:
       input#price.form-control(type='number', name='price' value=(item ? item.price : 0) required)
       label(for='stockCode') Stock Code:

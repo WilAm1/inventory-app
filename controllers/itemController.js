@@ -138,10 +138,73 @@ exports.postDeleteItem = [
 ];
 
 // GET update item
-exports.getUpdateItem = async (req, res, next) => {
-  res.send("GET Update item");
-};
+exports.getUpdateItem = [
+  param("id").custom((id) => isValidObjectId(id)),
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    const itemID = req.params.id;
+    try {
+      if (!errors.isEmpty()) throw new Error("404 Not Found");
+      const item = await Item.findById(itemID).exec();
+      const categories = await Category.find({ category: itemID }).exec();
+      if (!item) throw new Error("404 Not Found");
+      return res.render("itemForm", {
+        title: "Update Item",
+        item,
+        categories,
+      });
+    } catch (error) {
+      return next(error);
+    }
+  },
+];
+
 // POST update item
-exports.postUpdateItem = async (req, res, next) => {
-  res.send("Post update item");
-};
+exports.postUpdateItem = [
+  body("name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Invalid Name")
+    .isAlphanumeric()
+    .withMessage("Name must only use alphanumeric characters"),
+  body("description")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage(" Description Must not be empty"),
+  body("price", "Use numeric characters only").trim().isNumeric().escape(),
+  body("stockCode")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Stock Code must not be empty"),
+  body("category").trim().escape(),
+  async (req, res, next) => {
+    const itemID = req.params.id;
+    if (!isValidObjectId(itemID)) return next(new Error("404 Not Found"));
+    const errors = validationResult(req);
+    const item = new Item({
+      _id: itemID,
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      stockCode: req.body.stockCode,
+    });
+    try {
+      const isItemExists = await Item.findById(itemID).exec();
+      if (!isItemExists) throw new Error("404 Not Found");
+      if (!errors.isEmpty()) {
+        return res.render("itemDetail", {
+          title: "Update Item",
+          item,
+        });
+      }
+
+      await Item.findByIdAndUpdate(itemID, item);
+      return res.redirect("/catalog");
+    } catch (error) {
+      return next(error);
+    }
+  },
+];
