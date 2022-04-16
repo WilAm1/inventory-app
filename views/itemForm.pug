@@ -4,15 +4,15 @@ block content
   h1 Create new Item 
    
   form(method='POST' action='')
-    div.form-group
+    div.form-group(style='display:flex; flex-direction:column; width: 50%')
       label(for='name') Name:
-      input#name.form-control(type='text', placeholder='Piattos,Nescafe...' name='name' value=(item ? item.name : ""))
+      input#name.form-control(type='text', placeholder='Piattos,Nescafe...' name='name' value=(item ? item.name : "") required)
       label(for='description') Description:
-      textarea#description.form-control(type='textarea', placeholder='Something...' name='description' value=(item ? item.description : ""))
+      textarea#description.form-control(type='textarea', placeholder='Something...' name='description' value=(item ? item.description : "") required)
       label(for='price') Price:
       input#price.form-control(type='number', name='price' value=(item ? item.price : 0) required)
       label(for='stockCode') Stock Code:
-      input#stockCode.form-control(type='text', placeholder='EXPLE-0123' name='stockCode' value=(item ? item.stockCode : ""))
+      input#stockCode.form-control(type='text', placeholder='EXPLE-0123' name='stockCode' value=(item ? item.stockCode : "") required)
 
       label(for="category") Category 
       select#category.form-control(type='select' placeholder='Select One' required=true name='category')
