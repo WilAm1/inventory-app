@@ -91,7 +91,7 @@ exports.postCreateCategory = [
         });
       }
       await category.save();
-      return res.render("categoryDetail", category.url);
+      return res.redirect(category.url);
     } catch (error) {
       return next(error);
     }
@@ -151,9 +151,25 @@ exports.postDeleteCategory = [
 ];
 
 // GET update page
-exports.getUpdateCategory = async (req, res, next) => {
-  res.send("GET Update page");
-};
+exports.getUpdateCategory = [
+  param("id").custom((id) => isValidObjectId(id)),
+  async (req, res, next) => {
+    const categoryId = req.params.id;
+    const errors = validationResult(req);
+    try {
+      if (!errors.isEmpty()) throw new Error("404");
+      const category = await Category.findById(categoryId).exec();
+      if (!category) throw new Error("404");
+      res.render("categoryForm", {
+        title: " Update " + category.name,
+        category,
+      });
+    } catch (error) {
+      return next(error);
+    }
+  },
+];
+
 // POST update page
 exports.postUpdateCategory = async (req, res, next) => {
   res.send("Post update page");
