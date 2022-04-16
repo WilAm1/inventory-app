@@ -1,0 +1,17 @@
+extends layout 
+
+block content 
+  h1= title 
+
+  if category
+    h2= category.name 
+    p= category.description
+    br
+    ul
+    each item in items 
+      li
+        a(href=item.url) #{item.name}
+    else 
+      li No Items here yet! Make one!
+  else 
+    p Somethings wrong 

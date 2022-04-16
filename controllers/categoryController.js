@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 exports.getCategoryList = async (req, res, next) => {
   try {
     const categoryList = await Category.find({}).exec();
+    console.log(categoryList);
     res.render("categoryList", {
       title: "Category List",
       categoryList,
@@ -33,6 +34,7 @@ exports.getCategoryDetail = async (req, res, next) => {
         Item.find({ category: categoryID }).exec(cb);
       },
     });
+    console.log("i ran?");
     if (!category) {
       const errMsg = new Error("Item not found.");
       errMsg.status = 404;

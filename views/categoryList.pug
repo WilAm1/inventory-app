@@ -1,0 +1,15 @@
+extends layout 
+
+block content 
+  h1 Category List 
+  h2= title 
+  ul
+  each item in categoryList
+    li 
+      p 
+        a(href= item.url)  #{item.name}
+      p= item.description
+  else 
+    for err in errors 
+     li 
+       p err
