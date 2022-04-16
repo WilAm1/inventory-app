@@ -4,7 +4,7 @@ const Category = require("../models/Category");
 
 const { body, validationResult } = require("express-validator");
 
-// Get the full list of items
+// GET all items
 exports.getItemList = async (req, res, next) => {
   try {
     const items = await Item.find({}).exec();
@@ -16,7 +16,7 @@ exports.getItemList = async (req, res, next) => {
     return next(err);
   }
 };
-
+// GET item detail
 exports.getItemDetail = async (req, res, next) => {
   const itemID = req.params.id;
   try {
@@ -39,7 +39,7 @@ exports.getItemDetail = async (req, res, next) => {
     return next(err);
   }
 };
-
+// GET create item form
 exports.getCreateItem = async (req, res, next) => {
   try {
     const categories = await Category.find({}).exec();
@@ -51,7 +51,7 @@ exports.getCreateItem = async (req, res, next) => {
     return next(err);
   }
 };
-
+// POST create item form
 exports.postCreateItem = [
   body("name")
     .trim()
@@ -98,3 +98,20 @@ exports.postCreateItem = [
     }
   },
 ];
+
+// GET delete item
+exports.getDeleteItem = async (req, res, next) => {
+  res.send("GET delete item");
+};
+// POST delete item
+exports.postDeleteItem = async (req, res, next) => {
+  res.send("POST delete item");
+};
+// GET update item
+exports.getUpdateItem = async (req, res, next) => {
+  res.send("GET Update item");
+};
+// POST update item
+exports.postUpdateItem = async (req, res, next) => {
+  res.send("Post update item");
+};

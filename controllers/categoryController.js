@@ -7,6 +7,7 @@ const { body, validationResult } = require("express-validator");
 
 // ? Controllers for category view and routes
 
+// GET all category
 exports.getCategoryList = async (req, res, next) => {
   try {
     const categoryList = await Category.find({}).exec();
@@ -20,6 +21,7 @@ exports.getCategoryList = async (req, res, next) => {
   }
 };
 
+// GET category detail
 exports.getCategoryDetail = async (req, res, next) => {
   const categoryID = req.params.id;
 
@@ -54,13 +56,13 @@ exports.getCategoryDetail = async (req, res, next) => {
   }
 };
 
-// For form
+// GET form for creating new category
 exports.getCreateCategory = (req, res, next) => {
   res.render("categoryForm", {
     title: "Create new Catalog",
   });
 };
-
+// POST form for creating new categeory
 exports.postCreateCategory = [
   body("name")
     .trim()
@@ -96,3 +98,20 @@ exports.postCreateCategory = [
     }
   },
 ];
+
+// GET delete page
+exports.getDeleteCategory = async (req, res, next) => {
+  res.send("GET delete page");
+};
+// POST delete page
+exports.postDeleteCategory = async (req, res, next) => {
+  res.send("POST delete page");
+};
+// GET update page
+exports.getUpdateCategory = async (req, res, next) => {
+  res.send("GET Update page");
+};
+// POST update page
+exports.postUpdateCategory = async (req, res, next) => {
+  res.send("Post update page");
+};
