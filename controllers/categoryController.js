@@ -3,6 +3,8 @@ const Category = require("../models/Category");
 const async = require("async");
 const mongoose = require("mongoose");
 
+const { body, validationResult } = require("express-validator");
+
 // ? Controllers for category view and routes
 
 exports.getCategoryList = async (req, res, next) => {
@@ -59,4 +61,38 @@ exports.getCreateCategory = (req, res, next) => {
   });
 };
 
-exports.postCreateCategory = () => {};
+exports.postCreateCategory = [
+  body("name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Name must not be empty.")
+    .isAlphanumeric()
+    .withMessage("Name must only be with Alpha Numeric Characters"),
+  body("description")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Description must not be empty."),
+
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    const category = new Category({
+      name: req.body.name,
+      description: req.body.description,
+    });
+    try {
+      if (!errors.isEmpty()) {
+        return res.render("categoryForm", {
+          title: "Create Category (Error)",
+          errors: errors.array(),
+          category,
+        });
+      }
+      await category.save();
+      return res.render("categoryDetail", category.url);
+    } catch (error) {
+      return next(error);
+    }
+  },
+];
