@@ -1,9 +1,9 @@
 const Item = require("../models/Item");
 const Category = require("../models/Category");
 const async = require("async");
-const mongoose = require("mongoose");
+const { isValidObjectId } = require("mongoose");
 
-const { body, validationResult } = require("express-validator");
+const { body, param, validationResult } = require("express-validator");
 
 // ? Controllers for category view and routes
 
@@ -26,7 +26,7 @@ exports.getCategoryDetail = async (req, res, next) => {
   const categoryID = req.params.id;
 
   try {
-    if (!mongoose.isValidObjectId(categoryID)) {
+    if (!isValidObjectId(categoryID)) {
       const errMsg = new Error("Item not Found");
       errMsg.status = 404;
       throw errMsg;
@@ -40,7 +40,6 @@ exports.getCategoryDetail = async (req, res, next) => {
         Item.find({ category: categoryID }).exec(cb);
       },
     });
-    console.log("i ran?");
     if (!category) {
       const errMsg = new Error("Item not found.");
       errMsg.status = 404;
@@ -100,13 +99,57 @@ exports.postCreateCategory = [
 ];
 
 // GET delete page
-exports.getDeleteCategory = async (req, res, next) => {
-  res.send("GET delete page");
-};
+exports.getDeleteCategory = [
+  param("id").custom((id) => isValidObjectId(id)),
+  async (req, res, next) => {
+    const categoryID = req.params.id;
+    const errors = validationResult(req);
+    try {
+      if (!errors.isEmpty()) throw new Error("404 Not Found");
+      const category = await Category.findById(categoryID).exec();
+      const items = await Item.find({ category: categoryID }).exec();
+      if (items.length > 0) {
+        return res.render("categoryDelete", {
+          title: "Category Delete (delete items first)",
+          category,
+          items,
+        });
+      }
+      return res.render("categoryDelete", {
+        title: "Category Delete",
+        category,
+      });
+    } catch (error) {
+      return next(error);
+    }
+  },
+];
+
 // POST delete page
-exports.postDeleteCategory = async (req, res, next) => {
-  res.send("POST delete page");
-};
+exports.postDeleteCategory = [
+  body("categoryID").custom((id) => isValidObjectId(id)),
+  async (req, res, next) => {
+    const categoryID = req.body.categoryID;
+    const errors = validationResult(req);
+    try {
+      if (!errors.isEmpty()) throw new Error("404 No Page Found");
+      const category = await Category.findById(categoryID).exec();
+      const items = await Item.find({ category: categoryID }).exec();
+      if (items.length > 0) {
+        return res.render("categoryDelete", {
+          title: "Category Delete (delete items first)",
+          category,
+          items,
+        });
+      }
+      await Category.findByIdAndDelete(categoryID).exec();
+      res.redirect("/categories");
+    } catch (error) {
+      return next(error);
+    }
+  },
+];
+
 // GET update page
 exports.getUpdateCategory = async (req, res, next) => {
   res.send("GET Update page");
