@@ -3,3 +3,26 @@ extends layout
 block content 
   h1 Create new Item 
    
+  form(method='POST' action='')
+    div.form-group
+      label(for='name') Name:
+      input#name.form-control(type='text', placeholder='Piattos,Nescafe...' name='name' value=(item ? item.name : ""))
+      label(for='description') Description:
+      textarea#description.form-control(type='textarea', placeholder='Something...' name='description' value=(item ? item.description : ""))
+      label(for='price') Price:
+      input#price.form-control(type='number', name='price' value=(item ? item.price : 0) required)
+      label(for='stockCode') Stock Code:
+      input#stockCode.form-control(type='text', placeholder='EXPLE-0123' name='stockCode' value=(item ? item.stockCode : ""))
+
+      label(for="category") Category 
+      select#category.form-control(type='select' placeholder='Select One' required=true name='category')
+        for category in categories 
+          option(value=category._id) #{category.name}
+      
+
+    button.btn.btn-primary(type='submit') Submit
+
+  if errors
+   ul
+    for error in errors
+     li!= error.msg

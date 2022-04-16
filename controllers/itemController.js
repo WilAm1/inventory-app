@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Item = require("../models/Item.js");
+const Category = require("../models/Category");
 
 // Get the full list of items
 exports.getItemList = async (req, res, next) => {
@@ -37,9 +38,15 @@ exports.getItemDetail = async (req, res, next) => {
   }
 };
 
-exports.getCreateItem = (req, res, next) => {
-  res.render("itemForm", {
-    title: "New Item",
-  });
+exports.getCreateItem = async (req, res, next) => {
+  try {
+    const categories = await Category.find({}).exec();
+    res.render("itemForm", {
+      title: "New Item",
+      categories,
+    });
+  } catch (err) {
+    return next(err);
+  }
 };
 exports.postCreateItem = (req, res, next) => {};
