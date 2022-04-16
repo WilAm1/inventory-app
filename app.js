@@ -22,7 +22,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error"));
 
 // Routes
 const indexRouter = require("./routes/index");
-const catalogRouter = require("./routes/itemCatalog");
+const itemRouter = require("./routes/items");
 const categoryRouter = require("./routes/categories");
 
 const app = express();
@@ -38,7 +38,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/catalog", catalogRouter);
+app.use("/catalog", itemRouter);
 app.use("/categories", categoryRouter);
 
 // catch 404 and forward to error handler

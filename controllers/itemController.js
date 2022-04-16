@@ -5,7 +5,7 @@ const Item = require("../models/Item.js");
 exports.getItemList = async (req, res, next) => {
   try {
     const items = await Item.find({}).exec();
-    res.render("itemCatalog", {
+    res.render("itemList", {
       title: "Catalog",
       items,
     });
