@@ -10,7 +10,7 @@ block content
       input#name(type='text' name='name'  placeholder='ex. Gaming Components, Fish ...' value=(category ? category.name : '') required)
     div.form-group
       label(for='description') Description: 
-      textarea#description(type='textarea' name='description'  placeholder='Something...' value=(category ? category.description : '') required)
+      textarea#description(type='textarea' name='description'  placeholder='Something...' required) #{category ? category.description : ''}
     button.btn.btn-primary(type='submit') Submit
 
   if errors

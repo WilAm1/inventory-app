@@ -171,6 +171,29 @@ exports.getUpdateCategory = [
 ];
 
 // POST update page
-exports.postUpdateCategory = async (req, res, next) => {
-  res.send("Post update page");
-};
+exports.postUpdateCategory = [
+  body("name", "Name is in an Invalid Length")
+    .trim()
+    .isLength({ min: 1, max: 200 }),
+  async (req, res, next) => {
+    const categoryID = req.params.id;
+    const errors = validationResult(req);
+    try {
+      if (!isValidObjectId(categoryID)) throw new Error("404");
+      const category = new Category({
+        name: req.body.name,
+        _id: categoryID,
+      });
+      if (!errors.isEmpty()) {
+        return res.render("categoryForm", {
+          title: "Update Category",
+          category,
+        });
+      }
+      await Category.findByIdAndUpdate(categoryID, category);
+      res.redirect(category.url);
+    } catch (error) {
+      return next(error);
+    }
+  },
+];
