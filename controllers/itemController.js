@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const Item = require("../models/Item.js");
 const Category = require("../models/Category");
-
-const { body, validationResult } = require("express-validator");
+const { isValidObjectId } = require("mongoose");
+const { body, param, validationResult } = require("express-validator");
 
 // GET all items
 exports.getItemList = async (req, res, next) => {
@@ -100,13 +100,43 @@ exports.postCreateItem = [
 ];
 
 // GET delete item
-exports.getDeleteItem = async (req, res, next) => {
-  res.send("GET delete item");
-};
+exports.getDeleteItem = [
+  // ? Checks get param if id is valid mongoose ID
+  param("id").custom((id) => {
+    return isValidObjectId(id);
+  }),
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    try {
+      if (!errors.isEmpty()) throw new Error("404 Not found");
+      const itemID = req.params.id;
+      const item = await Item.findById(itemID).exec();
+      return res.render("itemDelete", {
+        title: "Delete Item",
+        item,
+      });
+    } catch (error) {
+      return next(error);
+    }
+  },
+];
+
 // POST delete item
-exports.postDeleteItem = async (req, res, next) => {
-  res.send("POST delete item");
-};
+exports.postDeleteItem = [
+  body("itemID").custom((id) => isValidObjectId(id)),
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    try {
+      if (!errors.isEmpty()) throw new Error("404 Invalid ID CODE");
+      const itemID = req.body.itemID;
+      await Item.findByIdAndDelete(itemID);
+      return res.redirect("/catalog");
+    } catch (error) {
+      return next(error);
+    }
+  },
+];
+
 // GET update item
 exports.getUpdateItem = async (req, res, next) => {
   res.send("GET Update item");

@@ -1,0 +1,14 @@
+extends layout 
+
+block content 
+  h1= title 
+
+  br
+  p Are you really sure to delete this item? 
+  h2= item.name 
+  p Stock Code: #{ item.stockCode}
+  form(method='POST' action='')
+    div.form-group
+      input#itemID.form-control(type='hidden',name='itemID', required='true', value=item._id )
+
+    button.btn.btn-primary(type='submit') Delete
