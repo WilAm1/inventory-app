@@ -3,6 +3,8 @@ const Category = require("../models/Category");
 const async = require("async");
 const mongoose = require("mongoose");
 
+// ? Controllers for category view and routes
+
 exports.getCategoryList = async (req, res, next) => {
   try {
     const categoryList = await Category.find({}).exec();
@@ -49,3 +51,12 @@ exports.getCategoryDetail = async (req, res, next) => {
     return next(err);
   }
 };
+
+// For form
+exports.getCreateCategory = (req, res, next) => {
+  res.render("categoryForm", {
+    title: "Create new Catalog",
+  });
+};
+
+exports.postCreateCategory = () => {};

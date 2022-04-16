@@ -36,3 +36,10 @@ exports.getItemDetail = async (req, res, next) => {
     return next(err);
   }
 };
+
+exports.getCreateItem = (req, res, next) => {
+  res.render("itemForm", {
+    title: "New Item",
+  });
+};
+exports.postCreateItem = (req, res, next) => {};

@@ -4,5 +4,11 @@ const router = express.Router();
 
 // GET all category in the db
 router.get("/", categoryController.getCategoryList);
-router.get("/:id", categoryController.getCategoryDetail);
+router.get("/category/:id", categoryController.getCategoryDetail);
+
+// GET form for creating category
+router.get("/create", categoryController.getCreateCategory);
+// POST form
+router.post("/create", categoryController.postCreateCategory);
+
 module.exports = router;
